@@ -1,0 +1,137 @@
+filegroup(
+    name = "javascript",
+    srcs = glob(
+        [
+            "src/**",
+            "webpack/**",
+            "*.js",
+            "*.json"
+        ],
+    )
+)
+
+genrule(
+    name = "static",
+    message = "Uploading aa ui static files",
+    srcs = [
+        ":javascript",
+        "//aa/repete:javascript",
+        "//aa/sales-ui/ui:static",
+        "//sixsense-js/packages/core:javascript",
+        "//sixsense-js/packages/core:storybook",
+        "//sixsense-js/packages/rbac:javascript",
+        "//aa/sales-dashboard:static",
+    ],
+    outs = [
+        "aa_ui_collectstatic.log",
+        "stats.json",
+        "repete_stats.json"
+    ],
+    cmd = "export DEBUG=False"
+        + "&& cd aa"
+        + "&& mkdir -p .tmp-cache-aa"
+        + "&& echo 'installing dependencies for aa-ui' "
+        + "&& yarn install --cache-folder .tmp-cache-aa --pure-lockfile >> ../$(location aa_ui_collectstatic.log)"
+        + "&& yarn add ../sixsense-js/packages/core/lib --cache-folder .tmp-cache-aa"
+        + "&& echo 'successfully installed dependencies for aa-ui' "
+        + "&& STORYBOOK_VERSION=$$(cat ../$(location //sixsense-js/packages/core:storybook)) npm run build:prod || exit 1 >> ../$(location aa_ui_collectstatic.log)"
+        + "&& echo 'successfully build aa-ui' "
+        + "&& cp dist/stats.json ../$(@D)/stats.json >> ../$(location aa_ui_collectstatic.log)"
+        + "&& cd repete"
+        + "&& mkdir -p .tmp-cache-repete"
+        + "&& yarn install --cache-folder .tmp-cache-repete --pure-lockfile >> ../../$(location aa_ui_collectstatic.log)"
+        + "&& npm run build:prod || exit 1 >> ../../$(location aa_ui_collectstatic.log)"
+        + "&& cd .."
+        + "&& cp repete_dist/stats.json ../$(@D)/repete_stats.json >> ../$(location aa_ui_collectstatic.log)"
+)
+
+genrule(
+    name = "static-local",
+    message = "Generating local aa ui static files",
+    srcs = [
+        ":javascript",
+        "//sixsense-js/packages/core:javascript",
+        "//sixsense-js/packages/core:storybook-local",
+        "//sixsense-js/packages/rbac:javascript",
+    ],
+    outs = [
+        "dist.tgz"
+    ],
+    cmd = "export DEBUG=True"
+        + "&& cd aa"
+        + "&& yarn install"
+        + "&& yarn add ../sixsense-js/packages/core/lib"
+        + "&& STORYBOOK_VERSION=$$(cat ../$(location //sixsense-js/packages/core:storybook-local)) npm run build:local"
+        + "&& tar cvzf ../$(@D)/dist.tgz dist/"
+)
+
+pkg_tar(
+    name = "dist",
+    deps = [
+        ":static-local"
+    ]
+)
+
+container_image(
+    name = "web-local",
+    repository = "sixsense",
+    entrypoint = ["dumb-init", "/init"],
+
+    base = "//services:init_bionic",
+
+    directory="/mnt/aa_ui/",
+
+    files = [
+        "//aa/server:service",
+    ],
+
+    tars = [
+        ":dist",
+        "//aa/repete:dist",
+    ],
+
+    symlinks = {
+        '/mnt/aa_ui/stats.json' : '/mnt/aa_ui/dist/stats.json',
+        '/mnt/aa_ui/repete_stats.json' : '/mnt/aa_ui/repete_dist/stats.json',
+        '/mnt/aa_ui/sales_stats.json' : '/mnt/aa_ui/sales_ui/ui/dist/stats.json',
+        '/mnt/aa_ui/sales_dashboard_stats.json' : '/mnt/aa_ui/sales_dashboard/dist/stats.json',
+        '/mnt/aa_ui/banyan_stats.json' : '/mnt/aa_ui/banyan/dist/stats.json',
+    },
+
+    ports = ["9010"],
+    cmd = ["/mnt/aa_ui/service", "runserver"]
+)
+
+container_image(
+    name = "web",
+    repository = "sixsense",
+    entrypoint = ["dumb-init", "/init"],
+
+    base = "//services:init_bionic",
+
+    directory="/mnt/aa_ui/",
+
+    files = [
+        "//aa/server:service",
+        ":static",
+        "//aa/sales-ui/ui:static",
+        "//aa/sales-dashboard:static",
+        "//aa/banyan:static",
+        "nginx.conf"
+    ],
+
+    ports = ["9010"],
+    cmd = ["/mnt/aa_ui/service", "runserver"],
+    visibility = ["//visibility:public"],
+)
+
+
+container_push(
+    name = "push_image",
+    format = "Docker",
+    image = ":web",
+    registry = "242358675102.dkr.ecr.us-east-1.amazonaws.com",
+    repository = "sixsense/aa_ui",
+    tag = "{BRANCH_NAME}.{BUILD_TIMESTAMP_READABLE}-{BUILD_COMMIT}",
+    visibility = ["//visibility:public"],
+)

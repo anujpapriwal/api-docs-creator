@@ -1,38 +1,404 @@
-.App {
+@font-face {
+  font-family: 'slate';
+  src: url('./fonts/slate.eot');
+  src: url('./fonts/slate.eot') format('embedded-opentype'),
+    url('./fonts/slate.woff2') format('woff2'),
+    url('./fonts/slate.woff') format('woff'),
+    url('./fonts/slate.ttf') format('truetype'),
+    url('./fonts/slate.svg#slate') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/nunito-sans-v12-latin-regular.eot'); /* IE9 Compat Modes */
+  src: url('./fonts/nunito-sans-v12-latin-regular.eot') format('embedded-opentype'), /* IE6-IE8 */
+        url('./fonts/nunito-sans-v12-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+        url('./fonts/nunito-sans-v12-latin-regular.woff') format('woff'), /* Modern Browsers */
+        url('./fonts/nunito-sans-v12-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+        url('./fonts/nunito-sans-v12-latin-regular.svg#NunitoSans') format('svg'); /* Legacy iOS */
+}
+
+:root {
+  --white: #fff;
+  --background-color: #1B2231;
+  --codebox-bg: #242E41;
+  --tabbtn-bg: #011627;
+  --text-color: #001F32;
+  --teal: #00898B;
+  --green: #22A042;
+  --red: #E12C2C;
+  --lightred: #FDEDED;
+  --lightteal: #E6F7F7;
+  --yellow: #D08802;
+  --grey: #E4E6E7;
+  --lightgrey: #F5F5F6;
+
+  --nav-indent: 10px;
+}
+
+.m-t-10 {
+  margin-top: 10px;
+}
+.m-l-10 {
+  margin-left: 10px;
+}
+.m-r-10 {
+  margin-right: 10px;
+}
+.m-a-10 {
+  margin: 10px;
+}
+.m-b-10 {
+  margin-bottom: 10px;
+}
+
+.p-t-10 {
+  padding-top: 10px;
+}
+.p-l-10 {
+  padding-left: 10px;
+}
+.p-r-10 {
+  padding-right: 10px;
+}
+.p-a-10 {
+  padding: 10px;
+}
+.p-b-10 {
+  padding-bottom: 10px;
+}
+
+.m-t-20 {
+  margin-top: 20px;
+}
+.m-l-20 {
+  margin-left: 20px;
+}
+.m-r-20 {
+  margin-right: 20px;
+}
+.m-a-20 {
+  margin: 20px;
+}
+.m-b-20 {
+  margin-bottom: 20px;
+}
+
+.p-t-20 {
+  padding-top: 20px;
+}
+.p-l-20 {
+  padding-left: 20px;
+}
+.p-r-20 {
+  padding-right: 20px;
+}
+.p-a-20 {
+  padding: 20px;
+}
+.p-b-20 {
+  padding-bottom: 20px;
+}
+
+.green-text {
+  color: var(--green)
+}
+
+.red-text {
+  color: var(--yellow)
+}
+
+.blue-text {
+  color: var(--teal);
+}
+
+.yellow-text {
+  color: var(--yellow);
+}
+
+body {
+  font: 'slate';
+  font-size: 14px;
+  background-color: var(--background-color);
+}
+
+.logo-container {
+  margin: 40px 0;
+}
+
+.logo-text {
+  color: var(--white);
+  margin-bottom: 40px;
+}
+
+h1, h2, h3 {
+  font-family: 'Nunito Sans';
+}
+
+.nav-tabs {
+  display: flex;
+  justify-content:space-between;
+  background-color: var(--tabbtn-bg);
+}
+
+.nav-tabs button {
+  background-color: var(--tabbtn-bg);
+  color: var(--white);
+  font-weight: 600;
+  padding: 15px;
+  line-height: 30px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.nav-tabs .active {
+  background-color: var(--background-color);
+  color: var(--white);
+  font-weight: 600;
+  padding: 24px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.container { 
+  display: flex;
+}
+
+.sider {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: auto;
+  min-width: 17.5%;
+  background: var(--background-color);
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.sider a {
+  text-align: left;
+  color: var(--white);
+  padding-left: 40px;
+  text-decoration: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.sider a:hover {
+  color: var(--teal);
+  text-decoration: none;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.sider .active h1 {
+  background-color: var(--teal);
+  color: var(--white);
+  text-decoration: none;
+}
+.sider .active h2 {
+  background-color: var(--teal);
+  color: var(--white);
+  text-decoration: none;
+}
+.sider .active h3 {
+  background-color: var(--teal);
+  color: var(--white);
+  text-decoration: none;
+}
+
+.sider h1 {
+  padding: 10px 0 10px 24px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+.sider h2 {
+  padding: 10px 0 10px 48px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+.sider h3 {
+  padding: 10px 0 10px 72px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.content-container {  
+  min-width: 80%;
+  background: var(--white) ;
+}
+
+.section-container { 
   display: flex;
-  flex-direction: column;
+}
+
+.content {
+  padding: 0 40px;
+  width: 50%;
+}
+
+.code-content {
+  width: 50%;
+  background: var(--background-color);
+  overflow-x: hidden;
+}
+
+.section-container h1 { 
+  margin: 0;
+  padding: 40px 0px 40px 0px !important;
+  font-size: 40px;
+}
+
+.section-container h2 { 
+  margin: 0;
+  padding: 40px 0px 24px 0px !important;
+  font-size: 24px;
+}
+
+.section-container h3 { 
+  margin: 0;
+  padding: 40px 0px 24px 0px !important;
+  font-size: 16px;
+}
+
+#tab-container {
+  position: sticky;
+  top: 0;
+}
+
+.tab-content {
+  padding: 0 40px;
+  width: 50%;
+}
+
+.tab-code-content { 
+  width: 50%;
+  background: var(--background-color);
+}
+
+.endpoint-box {
+  margin: 24px 0px;
+  border-radius: 4px;
+  background-color: var(--lightgrey);
+}
+
+.endpoint-box .endpoint-box-title {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding: 10px;
+  color: #415660;
+  font-weight: 600;
+  background-color: var(--grey);
+}
+
+.endpoint-box .endpoint-box-content {
+  padding: 10px !important;
+}
+
+.info-error {
+  margin: 24px 0px;
+  padding: 10px 24px;
+  border-radius: 4px;
+  width: calc(100% -48px);
+  font-weight: 500;
+  font-family: "Nunito Sans";
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  border-left: 8px solid var(--red);
+  background: var(--lightred);  
 }
 
-.App-link {
-  color: #61dafb;
+.info-primary {
+  margin: 24px 0px;
+  padding: 10px 24px;
+  border-radius: 4px;
+  width: calc(100% -48px);
+  font-weight: 500;
+  font-family: "Nunito Sans";
+  border-left: 8px solid var(--teal);   
+  background: var(--lightteal);  
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.codebox-container {
+  margin: 40px;
+}
+
+.codebox-container pre {
+  margin: 0px;
+}
+
+.codebox-copybtn-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.codebox-copybtn-container button {
+  background-color: var(--codebox-bg);
+  outline: none;
+  border: none;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  cursor: pointer;
+  font-family: 'Nunito Sans';
+  font-size: 14px;
+  font-size: 500;
+  color: var(--white);
+  padding: 5px 10px;
+}
+
+.codebox {
+  background: var(--codebox-bg) !important;
+  border-radius: 4px;  
+  padding: 20px;
+}
+
+table {
+  border-collapse: separate;
+  text-indent: initial;
+  border-spacing: 8px;
+}
+
+thead {
+  border-color: inherit;
+  border-style: solid;
+  border-width: 0;
+}
+
+table tr:last-child {
+  border-bottom: 1px solid #ccc;
+}
+
+th {
+  font-weight: 500;
+  padding: 5px 10px;
+  border-bottom: 1px solid #ccc !important;
+}
+
+td {
+  padding: 10px;
+}
+
+table tr th:first-child {
+  padding-right: 24px;
+}
+
+.tabbed-table th button {
+  font-weight: 500 !important;
+  background: none;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  color: #9EA8AD;
+}
+
+.tabbed-table th {
+  font-weight: 500;
+}
+
+.tabbed-table th .active-table-tab {
+  color: var(--text-color);
 }

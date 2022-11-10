@@ -1,0 +1,6 @@
+1. Code box (v important)  - done
+2. Info box (blue -> primary, red -> error) - done
+3. Table (tabbed, non tabbed) - 
+5. Text (color, weight, typography (code as well), size) - partially done
+6. Lists (ordered, unordered) - done
+7. Links - 
